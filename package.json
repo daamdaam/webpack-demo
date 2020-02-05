@@ -1,0 +1,73 @@
+{
+	"name": "webpack-demo",
+	"version": "0.0.1",
+	"description": "This is a webpack demo to show the various tasks that can be fired on a build.",
+	"scripts": {
+		"webpackSeparate": "node ./node_modules/webpack/bin/webpack index=./entry-js.js entry2=./entry-styles.css.js -o ./webpack_compiled_code.seperate/[name].bundle.js",
+		"webpackCombined": "node ./node_modules/webpack/bin/webpack ",
+		"httpserver": "node ./node_modules/http-server/bin/http-server ."
+	},
+	"keywords": [
+		"#"
+	],
+	"author": "A. Macmillan",
+	"license": "ISC",
+	"devDependencies": {
+		"@angelsolutionsltd/globalsass": "0.0.18",
+		"@vue/cli-plugin-babel": "^3.4.0",
+		"@vue/cli-plugin-eslint": "^3.4.0",
+		"@vue/cli-service": "3.7.0",
+		"@webpack-cli/info": "^0.2.0",
+		"babel-eslint": "^10.0.1",
+		"babel-minify-webpack-plugin": "^0.3.1",
+		"babel-preset-env": "^1.7.0",
+		"clean-webpack-plugin": "^3.0.0",
+		"css-loader": "^3.4.2",
+		"cssnano": "^4.1.10",
+		"dotenv": "^8.2.0",
+		"dotenv-expand": "^5.1.0",
+		"dotenv-webpack": "^1.7.0",
+		"eslint": "^5.8.0",
+		"eslint-plugin-vue": "^5.0.0",
+		"extract-loader": "^3.1.0",
+		"extract-text-webpack-plugin": "v4.0.0-alpha.0",
+		"file-loader": "^5.0.2",
+		"fs": "0.0.1-security",
+		"html-webpack-plugin": "^3.2.0",
+		"http-server": "^0.12.1",
+		"mini-css-extract-plugin": "^0.9.0",
+		"node-sass": "^4.13.1",
+		"optimize-css-assets-webpack-plugin": "^5.0.3",
+		"postcss-loader": "^3.0.0",
+		"postcss-scss": "^2.0.0",
+		"sass-loader": "^7.1.0",
+		"scss-loader": "0.0.1",
+		"style-loader": "^1.1.3",
+		"terser-webpack-plugin": "^2.3.4",
+		"url-loader": "^3.0.0",
+		"vue-loader": "^15.8.3",
+		"vue-template-compiler": "^2.5.21",
+		"webpack": "^4.41.5",
+		"webpack-cli": "^3.3.10",
+		"webpack-dev-server": "^3.7.2",
+		"webpack-fix-style-only-entries": "^0.4.0"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"eslint:recommended"
+		],
+		"rules": {},
+		"parserOptions": {
+			"parser": "babel-eslint"
+		}
+	},
+	"postcss": {
+		"plugins": {
+			"autoprefixer": {}
+		}
+	}
+}

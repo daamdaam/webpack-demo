@@ -1,0 +1,11 @@
+body {
+	html & {
+		background-image: url(/Images/Lambanana-Yellow.jpg);
+	}
+}
+
+body {
+	&:before {
+		content: $MyVar;
+	}
+}
