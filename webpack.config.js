@@ -1,10 +1,8 @@
 /**
- * Webpack Configuration for Perspective
- * This file is required to configure the build steps for GlobalScss inclusion
- * with the perspective project.
- *
- * All references to GlobalScss have been removed and a custom node module added
- * to the package.json.
+ * A Demo Webpack Configuration
+ * 
+ * This is to demonstrate things that can be done with webpack, feel free to pull this
+ * and ammend content and see what happens when you execute the package.json commands.
  *
  * Build steps can be executed via the script referenced in the package.json.
  */
