@@ -1,8 +1,0 @@
-html body {
-  background-image: url(/Images/Lambanana-Yellow.jpg); }
-
-body:before {
-  content: "some-var-to-be-passed-into-sass-or-js"; }
-
-/*# sourceURL=webpack-demo-scss.scss */
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2stZGVtby1zY3NzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxtREFBbUQsRUFBRTs7QUFFdkQ7RUFDRSxnREFBZ0QsRUFBRSIsImZpbGUiOiJ3ZWJwYWNrLWRlbW8tc2Nzcy5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaHRtbCBib2R5IHtcbiAgYmFja2dyb3VuZC1pbWFnZTogdXJsKC9JbWFnZXMvTGFtYmFuYW5hLVllbGxvdy5qcGcpOyB9XG5cbmJvZHk6YmVmb3JlIHtcbiAgY29udGVudDogXCJzb21lLXZhci10by1iZS1wYXNzZWQtaW50by1zYXNzLW9yLWpzXCI7IH1cbiJdfQ== */
