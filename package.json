@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "This is a webpack demo to show the various tasks that can be fired on a build.",
 	"scripts": {
-		"webpackSeparate": "node ./node_modules/webpack/bin/webpack index=./entry-js.js entry2=./entry-styles.css.js -o ./webpack_compiled_code.seperate/[name].bundle.js",
+		"webpackSeparate": "node ./node_modules/webpack/bin/webpack index=./entry-js.js entry2=./entry-styles.css.js -o ./webpack_compiled_code.separate/[name].bundle.js",
 		"webpackCombined": "node ./node_modules/webpack/bin/webpack ",
 		"httpserver": "node ./node_modules/http-server/bin/http-server ."
 	},
