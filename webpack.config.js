@@ -147,9 +147,9 @@ module.exports = {
 		/**
 		 * Path to output to.
 		 */
-		filename: '[name].bundle.js',
-		path: path.resolve(__dirname, "webpack_compiled_code"),
-		publicPath: "/webpack_compiled_code/",
+		// filename: '[name].bundle.js',
+		// path: path.resolve(__dirname, "webpack_compiled_code"),
+		// publicPath: "/webpack_compiled_code/",
 	},
 	optimization: {
 		//   minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
