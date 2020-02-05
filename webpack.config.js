@@ -146,19 +146,27 @@ module.exports = {
 	output: {
 		/**
 		 * Path to output to.
+		 * Defaults to ./dist if left commented out
+		 * See package.json script commands as i have used the -o (output flag)
+		 * on the command, meaning this isnt needed 
+		 * (There is a command to compile js separately, and a command to compile js
+		 * into a single file)
 		 */
 		// filename: '[name].bundle.js',
 		// path: path.resolve(__dirname, "webpack_compiled_code"),
 		// publicPath: "/webpack_compiled_code/",
-	},
-	optimization: {
-		//   minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
 	},
 	plugins: [
 		/**
 		 * Clear out old files when recompiling
 		 */
 		new CleanWebpackPlugin(),
+		/**
+		 * This is to remove JS files generated from the css/scss files
+		 * These files are generated as part of webpack build, but are not needed!
+		 * I have set the file extension of these files to be css.js, meaning they can be 
+		 * picked off and deleted by this plugin.
+		 */
 		new FixStyleOnlyEntriesPlugin({ extensions:['css.js'] }),
 	],
 	module: {
