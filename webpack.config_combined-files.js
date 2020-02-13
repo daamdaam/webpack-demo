@@ -91,16 +91,6 @@ module.exports = {
 	mode: envVars.NODE_ENV || "production",
 	entry: {
 		/**
-		 * Main entry points, 
-		 * i.e. where all the sass files are referenced.
-		 * 'entry' instances reference js files which import js modules
-		 * and which require the scss/css files
-		 * These are now passed into the webpack command instead - see package.json
-		 */
-		// entryJs: "./entry-js.js", 
-		// entryStyle: "./entry-styles.css.js", 
-
-		/**
 		 * Alternatively, you can reference the files 
 		 * individually or as an array
 		 * execute a build for this by uncommenting, commenting the 'entry'
@@ -150,9 +140,9 @@ module.exports = {
 		 * (There is a command to compile js separately, and a command to compile js
 		 * into a single file)
 		 */
-		// filename: '[name].bundle.js',
-		// path: path.resolve(__dirname, "webpack_compiled_code"),
-		// publicPath: "/webpack_compiled_code/",
+		filename: '[name].bundle.js',
+		path: path.resolve(__dirname, "webpack_compiled_code_combined"),
+		publicPath: "/webpack_compiled_code_combined/",
 	},
 	plugins: [
 		/**
@@ -218,7 +208,7 @@ module.exports = {
 							 * As many other vars can be defined and passed
 							 * into the sass in the same way
 							 */
-							data: "$MyVar:'" + envVars.MyVar + "';"
+							prependData: "$MyVar:'" + envVars.MyVar + "';"
 						}
 					}
 				]

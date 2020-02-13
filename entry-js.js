@@ -1,6 +1,6 @@
 /**
  * JS files/modules
  */
-import ('./alt.Assets/js/alt.moduleOne');
-import ('./alt.Assets/js/alt.moduleTwo');
-import ('./alt.Assets/js/alt.moduleThree');
+import ('./assets/js/moduleOne');
+import ('./assets/js/moduleTwo');
+import ('./assets/js/moduleThree');
