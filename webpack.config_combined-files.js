@@ -15,6 +15,14 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 /**
+ * Copy webpack plugin
+ * Uses this to copy assets, images etc, to a given folder on build
+ * In this instance, the plugin will copy all the images to the dist folder post build
+ * https://github.com/webpack-contrib/copy-webpack-plugin
+ */
+ const copyWebpackPlugin = require('copy-webpack-plugin');
+
+/**
  * Path Module
  * The path module provides utilities for working with file and directory paths.
  * https://nodejs.org/docs/latest/api/path.html
@@ -50,6 +58,12 @@ const devMode = envVars.NODE_ENV !== "production";
  */
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+/**
+ * Remove files from given directories
+ * https://www.npmjs.com/package/remove-files-webpack-plugin
+ */
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 /**
  * Get the PostCss loader plugins
@@ -96,12 +110,15 @@ module.exports = {
 		 * execute a build for this by uncommenting, commenting the 'entry'
 		 * instance and firing the command
 		 */
-		SCSS: './assets/css/webpack-demo-scss.scss',
-		CSS: './assets/css/webpack-demo-css.css',
-		JS: [
-			'./assets/js/moduleOne',
-			'./assets/js/moduleTwo',
-			'./assets/js/moduleThree'
+		"css/styles.css": [
+			//'./assets/scss/webpack-demo-scss.scss',
+			'./assets/custom-css/webpack-demo-custom-css.css',
+			'./assets/vendor-css/webpack-demo-vendor-css.css'
+		],
+		"js/modules.js": [
+			'./assets/js/moduleOne.js',
+			'./assets/js/moduleTwo.js',
+			'./assets/js/moduleThree.js'
 		]
 
 	},
@@ -140,9 +157,9 @@ module.exports = {
 		 * (There is a command to compile js separately, and a command to compile js
 		 * into a single file)
 		 */
-		filename: '[name].bundle.js',
-		path: path.resolve(__dirname, "webpack_compiled_code_combined"),
-		publicPath: "/webpack_compiled_code_combined/",
+		filename: '[name].js',
+		path: path.resolve(__dirname, "dist"),
+		publicPath: "/dist/",
 	},
 	plugins: [
 		/**
@@ -150,108 +167,138 @@ module.exports = {
 		 */
 		new CleanWebpackPlugin(),
 		/**
-		 * This is to remove JS files generated from the css/scss files
-		 * These files are generated as part of webpack build, but are not needed!
-		 * I have set the file extension of these files to be css.js, meaning they can be 
-		 * picked off and deleted by this plugin.
+		 * Clear out old files when recompiling
+		 * Before and After build
+		 * Here, before build delete the webpack generated css files
 		 */
-		new FixStyleOnlyEntriesPlugin({ extensions:['css.js'] }),
+		new RemovePlugin({
+			before: {
+				include: [
+					path.resolve(__dirname, 'dist')
+				]
+			},
+			after: {
+				test: [
+					{
+						folder: "dist/css",
+						method: filePath => {
+							return new RegExp(/\.css.js$/, "m").test(filePath);
+						}
+					}
+				]
+			}
+		}),
+		new copyWebpackPlugin([
+			{ from: './assets/images', to: './images' },
+			{ from: './assets/templates/resulting-index-combined-js.html', to: './resulting-index-combined-js.html' }
+		  ]), 
 	],
 	module: {
 		rules: [
+			{
+				test: /\.s?css$/,
+				use: [
+					{
+					  loader: MiniCssExtractPlugin.loader
+					},
+					'css-loader',
+					'postcss-loader',
+					'sass-loader',
+				  ],
+			},
 			/**
 			 * Loaders to create and format the
 			 * CSS on build
 			 * NOTE: Build steps for module rules run in reverse!
 			 * I.E. from bottom to top.
 			 */
-			{
-				test: /\.(sass|scss)$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							name: "[name].css",
-							context: "./",
-							outputPath: "."
-						}
-					},
-					{
-						loader: "extract-loader"
-					},
-					{
-						loader: "css-loader",
-						options: {
-							sourceMap: devMode ? true : false,
-							url: true
-						}
-					},
-					{
-						loader: "postcss-loader",
-						options: {
-							parser: "postcss-scss",
-							ident: "postcss",
-							plugins: () => getPostCssPlugins(),
-							minimize: devMode ? false : true
-						}
-					},
-					{
-						loader: "sass-loader",
-						options: {
-							sourceMap: devMode ? true : false,
-							sassOptions: {
-								outputStyle: devMode ? "expanded" : "compressed"
-							},
-							/**
-							 * Pass in the env var to the sass files,
-							 * defined in this case as $environment.
-							 * As many other vars can be defined and passed
-							 * into the sass in the same way
-							 */
-							prependData: "$MyVar:'" + envVars.MyVar + "';"
-						}
-					}
-				]
-			},
+			// {
+			// 	test: /\.(sass|scss)$/,
+			// 	use: [
+			// 		{
+			// 			loader: "file-loader",
+			// 			options: {
+			// 				name: "[name].css",
+			// 				context: "./",
+			// 				outputPath: "./css"
+			// 			}
+			// 		},
+			// 		{
+			// 			loader: "extract-loader"
+			// 		},
+			// 		{
+			// 			loader: "css-loader",
+			// 			options: {
+			// 				sourceMap: devMode ? true : false,
+			// 				url: true
+			// 			}
+			// 		},
+			// 		{
+			// 			loader: "postcss-loader",
+			// 			options: {
+			// 				parser: "postcss-scss",
+			// 				ident: "postcss",
+			// 				plugins: () => getPostCssPlugins(),
+			// 				minimize: devMode ? false : true
+			// 			}
+			// 		},
+			// 		{
+			// 			loader: "sass-loader",
+			// 			options: {
+			// 				sourceMap: devMode ? true : false,
+			// 				sassOptions: {
+			// 					outputStyle: devMode ? "expanded" : "compressed"
+			// 				},
+			// 				/**
+			// 				 * Pass in the env var to the sass files,
+			// 				 * defined in this case as $environment.
+			// 				 * As many other vars can be defined and passed
+			// 				 * into the sass in the same way
+			// 				 */
+			// 				prependData: "$MyVar:'" + envVars.MyVar + "';"
+			// 			}
+			// 		}
+			// 	]
+			// },
 
 			/**
 			 * This is for standard CSS files, i.e. not sass/less
 			 * or any other css files that need compiling into CSS
 			 */
-			{
-				test: /\.css$/,
-				use: [
-					{
-						loader: "file-loader",
-						options: {
-							name: "[name].css",
-							context: "./",
-							outputPath: "."
-						}
-					},
-					{
-						loader: "extract-loader"
+			// {
+			// 	test: /\.css$/,
+			// 	use: [
+			// 		{
+			// 			loader: "file-loader",
+			// 			options: {
+			// 				// name: "[name].css",
+			// 				context: "./",
+			// 				outputPath: "./css"
+			// 			}
+			// 		},
+			// 		{
+			// 			loader: "extract-loader"
 						
-						//loader: MiniCssExtractPlugin.loader,
-					},
-					{
-						loader: "css-loader",
-						options: {
-							sourceMap: devMode ? true : false,
-							url: false
-						}
-					},
-					{
-						loader: "postcss-loader",
-						options: {
-							parser: "postcss-scss",
-							ident: "postcss",
-							plugins: () => getPostCssPlugins(),
-							minimize: devMode ? false : true
-						}
-					}
-				]
-			},
+			// 			//loader: MiniCssExtractPlugin.loader,
+			// 		},
+			// 		{
+			// 			loader: "css-loader",
+			// 			options: {
+			// 				sourceMap: devMode ? true : false,
+			// 				url: false
+			// 			}
+			// 		},
+			// 		{
+			// 			loader: "postcss-loader",
+			// 			options: {
+			// 				parser: "postcss-scss",
+			// 				ident: "postcss",
+			// 				plugins: () => getPostCssPlugins(),
+			// 				minimize: devMode ? false : true
+			// 			}
+			// 		}
+			// 	]
+			// },
 
 			/**
 			 * This may be needed to resolve image paths for images refereced in the css, but maybe not
@@ -261,11 +308,14 @@ module.exports = {
 				test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|png)(\?[a-z0-9=.]+)?$/,
 				use: [
 					{
-						/**
-						 * This loaded corrects paths to images in the sass files
-						 */
-						loader: "url-loader?limit=100000"
-					}
+						loader: 'file-loader'
+					},
+					// {
+					// 	loader: 'extract-loader'
+					// },
+					// {
+					// 	loader: "url-loader?limit=200000"
+					// },
 				]
 			}
 		]

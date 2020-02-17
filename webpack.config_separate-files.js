@@ -15,6 +15,14 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 /**
+ * Copy webpack plugin
+ * Uses this to copy assets, images etc, to a given folder on build
+ * In this instance, the plugin will copy all the images to the dist folder post build
+ * https://github.com/webpack-contrib/copy-webpack-plugin
+ */
+ const copyWebpackPlugin = require('copy-webpack-plugin');
+
+/**
  * Path Module
  * The path module provides utilities for working with file and directory paths.
  * https://nodejs.org/docs/latest/api/path.html
@@ -50,6 +58,12 @@ const devMode = envVars.NODE_ENV !== "production";
  */
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+/**
+ * Remove files from given directories
+ * https://www.npmjs.com/package/remove-files-webpack-plugin
+ */
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 /**
  * Get the PostCss loader plugins
@@ -93,12 +107,23 @@ module.exports = {
 		/**
 		 * Main entry points, 
 		 * i.e. where all the sass files are referenced.
-		 * 'entry' instances reference js files which import js modules
-		 * and which require the scss/css files
-		 * These are now passed into the webpack command instead - see package.json
-		 */
-		entryJs: "./entry-js.js", 
-		entryStyle: "./entry-styles.css.js", 
+		 * 'entry' instances reference js files which can 
+		 * import js modules and also reference scss/css 
+		 * files, where scss files can also reference other scss files.
+		*/
+		"js/moduleOne.js": "./assets/js/moduleOne.js",
+		"js/moduleTwo.js": "./assets/js/moduleTwo.js",
+		"js/moduleThree.js": "./assets/js/moduleThree.js",
+		"css/main.css": "./assets/scss/webpack-demo-scss.scss",
+		"css/vendor.css": [
+			"./assets/vendor-css/webpack-demo-vendor-css.css" 
+		],
+		"css/custom.css": [
+			"./assets/custom-css/webpack-demo-custom-css.css"
+		],
+		// "vueapp": [
+		// 	"./vue.app/src/main.js"
+		// ]
 	},
 
 	resolve: {
@@ -135,9 +160,9 @@ module.exports = {
 		 * (There is a command to compile js separately, and a command to compile js
 		 * into a single file)
 		 */
-		filename: 'seperate_[name].bundle.js',
-		path: path.resolve(__dirname, "webpack_compiled_code_seperate"),
-		publicPath: "/webpack_compiled_code_seperate/",
+		filename: "[name].js",
+		path: path.resolve(__dirname, "dist"),
+		publicPath: "/dist/"
 	},
 	plugins: [
 		/**
@@ -145,12 +170,31 @@ module.exports = {
 		 */
 		new CleanWebpackPlugin(),
 		/**
-		 * This is to remove JS files generated from the css/scss files
-		 * These files are generated as part of webpack build, but are not needed!
-		 * I have set the file extension of these files to be css.js, meaning they can be 
-		 * picked off and deleted by this plugin.
+		 * Clear out old files when recompiling
+		 * Before and After build
+		 * Here, before build delete the webpack generated css files
 		 */
-		new FixStyleOnlyEntriesPlugin({ extensions:['css.js'] }),
+		new RemovePlugin({
+			before: {
+				include: [
+					path.resolve(__dirname, 'dist')
+				]
+			},
+			after: {
+				test: [
+					{
+						folder: "dist/css",
+						method: filePath => {
+							return new RegExp(/\.css.js$/, "m").test(filePath);
+						}
+					}
+				]
+			}
+		}),
+		new copyWebpackPlugin([
+			{ from: './assets/images', to: './images' },
+			{ from: './assets/templates/resulting-index-separate-js.html', to: './resulting-index-separate-js.html' }
+		  ]), 
 	],
 	module: {
 		rules: [
@@ -168,7 +212,7 @@ module.exports = {
 						options: {
 							name: "[name].css",
 							context: "./",
-							outputPath: "."
+							outputPath: "./css/"
 						}
 					},
 					{
@@ -222,7 +266,7 @@ module.exports = {
 						options: {
 							name: "[name].css",
 							context: "./",
-							outputPath: "."
+							outputPath: "./css/"
 						}
 					},
 					{
@@ -257,11 +301,14 @@ module.exports = {
 				test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|png)(\?[a-z0-9=.]+)?$/,
 				use: [
 					{
-						/**
-						 * This loaded corrects paths to images in the sass files
-						 */
-						loader: "url-loader?limit=100000"
-					}
+						loader: 'file-loader'
+					},
+					// {
+					// 	loader: 'extract-loader'
+					// },
+					// {
+					// 	loader: "url-loader?limit=200000"
+					// },
 				]
 			}
 		]
