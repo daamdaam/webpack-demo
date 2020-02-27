@@ -136,6 +136,9 @@ module.exports = {
 			'./assets/js/moduleOne.js',
 			'./assets/js/moduleTwo.js',
 			'./assets/js/moduleThree.js'
+		],
+		"vueapp/index.js": [
+			"./vue.app/src/main.js"
 		]
 
 	},
@@ -157,7 +160,8 @@ module.exports = {
 			 * 
 			 * NOT WORKING YET FOR BACKGROUND-IMAGES.. :O(
 			 */
-			"ImagesPath": path.resolve(__dirname, "Images")
+			"ImagesPath": path.resolve(__dirname, "Images"),
+			'vue$': path.resolve(__dirname, 'node_modules/vue/dist/vue.esm.js')
 		},
 		/**
 		 * Extensions of files where these keys *should* be accessible from
@@ -175,8 +179,8 @@ module.exports = {
 		 * into a single file)
 		 */
 		filename: '[name].js',
-		path: path.resolve(__dirname, "dist"),
-		publicPath: "/dist/",
+		path: path.resolve(__dirname, "dist-combined"),
+		publicPath: "/dist-combined/",
 	},
 	plugins: [
 		/**
@@ -191,13 +195,13 @@ module.exports = {
 		new RemovePlugin({
 			before: {
 				include: [
-					path.resolve(__dirname, 'dist')
+					path.resolve(__dirname, 'dist-combined')
 				]
 			},
 			after: {
 				test: [
 					{
-						folder: "dist/css",
+						folder: "dist-combined/css",
 						method: filePath => {
 							return new RegExp(/\.css.js$/, "m").test(filePath);
 						}
@@ -230,6 +234,9 @@ module.exports = {
 			},
 			{
 				test: /\.(sass|scss|css)$/,
+				exclude: [
+					path.resolve(__dirname, 'vue.app')
+				],
 				use: [
 					{
 						loader: MiniCssExtractPlugin.loader
@@ -289,10 +296,7 @@ module.exports = {
 			 */
 			{
 				test: /\.js$/,
-				use: [	
-				// {
-				// 	loader: "uglify-loader"
-				// },
+				use: [	 
 				{
 					loader: "babel-loader",
 					query: {
@@ -304,7 +308,7 @@ module.exports = {
 				],
 				include: [path.resolve(__dirname, "vue.app")],
 				exclude: [ 
-					/node_modules/
+					path.resolve(__dirname, 'node_modules')
 				]
 			},
 			{
@@ -317,11 +321,11 @@ module.exports = {
 					}
 				},
 				exclude: [ 
-					/node_modules/
+					path.resolve(__dirname, 'node_modules')
 				]
 			},
 			{
-				test: /\.scss$/,
+				test: /\.s?css$/,
 				include: [path.resolve(__dirname, "vue.app")],
 				use: [
 				'vue-style-loader',

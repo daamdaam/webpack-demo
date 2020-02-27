@@ -1,5 +1,5 @@
 <template>
-  <section id="app" class="terminal">
+  <section class="terminal">
     <nav class="terminal__nav">
       <h1>Command Prompt</h1>
     </nav>
@@ -20,17 +20,6 @@ $background-color: #2b2b2b;
 $terminal-main-color: #1a1b1f;
 $terminal-nav-color: white;
 $terminal-nav-color--focused: #2C3039;
-
-body {
-  margin: 0;
-  overflow: hidden;
-  background: $background-color;
-  font-family: courier new, arial, sans-serif;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .terminal {
   width: 90vw;

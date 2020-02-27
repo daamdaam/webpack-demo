@@ -77,23 +77,23 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/dist/";
+/******/ 	__webpack_require__.p = "/dist-separate/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/moduleThree.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/moduleOne.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./assets/js/moduleThree.js":
-/*!**********************************!*\
-  !*** ./assets/js/moduleThree.js ***!
-  \**********************************/
+/***/ "./assets/js/moduleOne.js":
+/*!********************************!*\
+  !*** ./assets/js/moduleOne.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("console.log('Sorry I couldnt get thro!');\n\n//# sourceURL=webpack:///./assets/js/moduleThree.js?");
+eval("console.log('hey!');\n\n//# sourceURL=webpack:///./assets/js/moduleOne.js?");
 
 /***/ })
 

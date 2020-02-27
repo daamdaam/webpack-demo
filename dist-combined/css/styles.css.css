@@ -1,0 +1,40 @@
+/**
+	Demo SCSS file
+**/
+html body.sass-style {
+  background-image: url(/images/Lambanana-Yellow.jpg);
+}
+body:before {
+  content: "some-var-to-be-passed-into-sass-or-js";
+}
+body:after {
+  content: "something-for-scss";
+}
+
+/**
+	Demo alternate SCSS file
+**/
+html body.sass-style {
+  background-image: url(/images/Lambanana-Yellow.jpg);
+}
+body:before {
+  content: "some-var-to-be-passed-into-sass-or-js";
+}
+body:after {
+  content: "something-for-scss";
+}
+
+/**
+	Demo custom CSS file
+**/
+body.custom-style-class {
+  background-image: url(/images/Lambanana-Yellow.jpg);
+}
+
+/**
+	Demo vendor specific CSS file
+**/
+body.vendor-style-class {
+  background-image: url(/images/Lambanana-Yellow.jpg);
+}
+

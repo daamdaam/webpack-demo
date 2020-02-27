@@ -77,14 +77,36 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/dist/";
+/******/ 	__webpack_require__.p = "/dist-combined/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/moduleTwo.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./assets/js/moduleOne.js":
+/*!********************************!*\
+  !*** ./assets/js/moduleOne.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("console.log('hey!');\n\n//# sourceURL=webpack:///./assets/js/moduleOne.js?");
+
+/***/ }),
+
+/***/ "./assets/js/moduleThree.js":
+/*!**********************************!*\
+  !*** ./assets/js/moduleThree.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("console.log('Sorry I couldnt get thro!');\n\n//# sourceURL=webpack:///./assets/js/moduleThree.js?");
+
+/***/ }),
 
 /***/ "./assets/js/moduleTwo.js":
 /*!********************************!*\
@@ -94,6 +116,17 @@
 /***/ (function(module, exports) {
 
 eval("console.log('How you doing?!');\n\n//# sourceURL=webpack:///./assets/js/moduleTwo.js?");
+
+/***/ }),
+
+/***/ 1:
+/*!******************************************************************************************!*\
+  !*** multi ./assets/js/moduleOne.js ./assets/js/moduleTwo.js ./assets/js/moduleThree.js ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("__webpack_require__(/*! ./assets/js/moduleOne.js */\"./assets/js/moduleOne.js\");\n__webpack_require__(/*! ./assets/js/moduleTwo.js */\"./assets/js/moduleTwo.js\");\nmodule.exports = __webpack_require__(/*! ./assets/js/moduleThree.js */\"./assets/js/moduleThree.js\");\n\n\n//# sourceURL=webpack:///multi_./assets/js/moduleOne.js_./assets/js/moduleTwo.js_./assets/js/moduleThree.js?");
 
 /***/ })
 

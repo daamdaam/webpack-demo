@@ -3,9 +3,13 @@
 	"version": "0.0.1",
 	"description": "This is a webpack demo to show the various tasks that can be fired on a build.",
 	"scripts": {
-		"webpackSeparate": "node ./node_modules/webpack/bin/webpack --config ./webpack.config_separate-files.js",
-		"webpackCombined": "node ./node_modules/webpack/bin/webpack --config ./webpack.config_combined-files.js",
-		"httpserver": "node ./node_modules/http-server/bin/http-server ."
+		"wpsep": "node ./node_modules/webpack/bin/webpack --config ./webpack.config_separate-files.js",
+		"wpcom": "node ./node_modules/webpack/bin/webpack --config ./webpack.config_combined-files.js",
+		"httpserver": "node ./node_modules/http-server/bin/http-server .",
+		"srvcom": "node ./node_modules/http-server/bin/http-server ./dist-combined --port 10001",
+		"srvsep": "node ./node_modules/http-server/bin/http-server ./dist-separate --port 10002",
+		"sep": "npm run wpsep && npm run srvsep",
+		"com": "npm run wpcom && npm run srvcom"
 	},
 	"keywords": [
 		"#"

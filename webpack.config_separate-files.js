@@ -173,8 +173,8 @@ module.exports = {
 		 * into a single file)
 		 */
 		filename: "[name].js",
-		path: path.resolve(__dirname, "dist"),
-		publicPath: "/dist/"
+		path: path.resolve(__dirname, "dist-separate"),
+		publicPath: "/dist-separate/"
 	},
 	plugins: [
 		/**
@@ -189,13 +189,13 @@ module.exports = {
 		new RemovePlugin({
 			before: {
 				include: [
-					path.resolve(__dirname, 'dist')
+					path.resolve(__dirname, 'dist-separate')
 				]
 			},
 			after: {
 				test: [
 					{
-						folder: "dist/css",
+						folder: "dist-separate/css",
 						method: filePath => {
 							return new RegExp(/\.css.js$/, "m").test(filePath);
 						}
@@ -344,48 +344,10 @@ module.exports = {
 				]
 			},
 			
-			{
-				test: /\.scss$/,
-				include: [path.resolve(__dirname, "vue.app")],
-				use: [
-				'vue-style-loader',
-				'css-loader',
-				'sass-loader'
-				]
-			},
-			{
-				test: /\.vue$/,
-				use: [
-					{
-						loader: "babel-loader", 
-						query: {
-							presets: [
-								require.resolve('babel-preset-env')
-							]
-						} 
-					},
-					{
-						loader: "vue-loader",
-						options: {
-							plugins: loader => {
-								new VuetifyLoaderPlugin()
-							}
-						},
-					},
-					
-				'vue-style-loader',
-				],
-				include: [path.resolve(__dirname, "vue.app")],
-				exclude: [ 
-					/node_modules/
-				]
-			},
+			
 			{
 				test: /\.js$/,
-				use: [	
-				// {
-				// 	loader: "uglify-loader"
-				// },
+				use: [	 
 				{
 					loader: "babel-loader",
 					query: {
@@ -397,7 +359,29 @@ module.exports = {
 				],
 				include: [path.resolve(__dirname, "vue.app")],
 				exclude: [ 
-					/node_modules/
+					path.resolve(__dirname, 'node_modules')
+				]
+			},
+			{
+				test: /\.vue$/,
+				loader: "vue-loader",
+				include: [path.resolve(__dirname, "vue.app")],
+				options: {
+					plugins: loader => {
+						new VuetifyLoaderPlugin()
+					}
+				},
+				exclude: [ 
+					path.resolve(__dirname, 'node_modules')
+				]
+			},
+			{
+				test: /\.s?css$/,
+				include: [path.resolve(__dirname, "vue.app")],
+				use: [
+				'vue-style-loader',
+				'css-loader',
+				'sass-loader'
 				]
 			},
 		]
