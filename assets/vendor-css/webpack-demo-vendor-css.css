@@ -1,3 +1,7 @@
+/**
+	Demo vendor specific CSS file
+**/
+
 body.vendor-style-class {
 	background-image: url(/images/Lambanana-Yellow.jpg);
 }

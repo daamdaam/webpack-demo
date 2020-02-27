@@ -36,6 +36,14 @@ const path = require("path");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 /**
+ * vue-loader is a loader for webpack that allows you to author Vue
+ * components in a format called Single-File Components (SFCs).
+ * https://vue-loader.vuejs.org/
+ *
+ */
+const { VueLoaderPlugin } = require("vue-loader");
+
+/**
  * Get environment variables from the .env file, located in the root
  * Envirment variables can be added to the .env file and passed in
  * to a SASS file (or any other files, js etc) using the appropriate
@@ -114,16 +122,20 @@ module.exports = {
 		"js/moduleOne.js": "./assets/js/moduleOne.js",
 		"js/moduleTwo.js": "./assets/js/moduleTwo.js",
 		"js/moduleThree.js": "./assets/js/moduleThree.js",
-		"css/main.css": "./assets/scss/webpack-demo-scss.scss",
+		"css/main.css": [
+			"./assets/scss/webpack-demo-scss.scss",
+			
+			'./assets/scss/webpack-demo-scss.alt.scss',
+		],
 		"css/vendor.css": [
 			"./assets/vendor-css/webpack-demo-vendor-css.css" 
 		],
 		"css/custom.css": [
 			"./assets/custom-css/webpack-demo-custom-css.css"
 		],
-		// "vueapp": [
-		// 	"./vue.app/src/main.js"
-		// ]
+		"vueapp/index.js": [
+			"./vue.app/src/main.js"
+		]
 	},
 
 	resolve: {
@@ -195,6 +207,8 @@ module.exports = {
 			{ from: './assets/images', to: './images' },
 			{ from: './assets/templates/resulting-index-separate-js.html', to: './resulting-index-separate-js.html' }
 		  ]), 
+		  
+		new VueLoaderPlugin(),
 	],
 	module: {
 		rules: [
@@ -206,6 +220,9 @@ module.exports = {
 			 */
 			{
 				test: /\.(sass|scss)$/,
+				exclude: [
+					path.resolve(__dirname, 'vue.app')
+				],
 				use: [
 					{
 						loader: "file-loader",
@@ -248,7 +265,19 @@ module.exports = {
 							 * As many other vars can be defined and passed
 							 * into the sass in the same way
 							 */
-							prependData: "$MyVar:'" + envVars.MyVar + "';"
+							
+							prependData: (loaderContext) => {
+								// More information about available properties https://webpack.js.org/api/loaders/
+								const { resourcePath, rootContext } = loaderContext;
+								const relativePath = path.relative(rootContext, resourcePath);
+				
+								console.log('relativePath ', relativePath);
+								if (relativePath === 'assets\\scss\\webpack-demo-scss.alt.scss') {
+								  return "$MyVar:" + envVars.MyVar + "; $MyVar2: 'something-for-alt-scss';";
+								}
+				
+								return "$MyVar:'" + envVars.MyVar + "'; $MyVar2: 'something-for-scss';"
+							  },
 						}
 					}
 				]
@@ -260,6 +289,9 @@ module.exports = {
 			 */
 			{
 				test: /\.css$/,
+				exclude: [
+					path.resolve(__dirname, 'vue.app')
+				],
 				use: [
 					{
 						loader: "file-loader",
@@ -310,7 +342,64 @@ module.exports = {
 					// 	loader: "url-loader?limit=200000"
 					// },
 				]
-			}
+			},
+			
+			{
+				test: /\.scss$/,
+				include: [path.resolve(__dirname, "vue.app")],
+				use: [
+				'vue-style-loader',
+				'css-loader',
+				'sass-loader'
+				]
+			},
+			{
+				test: /\.vue$/,
+				use: [
+					{
+						loader: "babel-loader", 
+						query: {
+							presets: [
+								require.resolve('babel-preset-env')
+							]
+						} 
+					},
+					{
+						loader: "vue-loader",
+						options: {
+							plugins: loader => {
+								new VuetifyLoaderPlugin()
+							}
+						},
+					},
+					
+				'vue-style-loader',
+				],
+				include: [path.resolve(__dirname, "vue.app")],
+				exclude: [ 
+					/node_modules/
+				]
+			},
+			{
+				test: /\.js$/,
+				use: [	
+				// {
+				// 	loader: "uglify-loader"
+				// },
+				{
+					loader: "babel-loader",
+					query: {
+						presets: [
+						  require.resolve('babel-preset-env')
+						]
+					  }
+				}
+				],
+				include: [path.resolve(__dirname, "vue.app")],
+				exclude: [ 
+					/node_modules/
+				]
+			},
 		]
 	}
 };

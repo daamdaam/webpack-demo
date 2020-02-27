@@ -57,13 +57,29 @@ const devMode = envVars.NODE_ENV !== "production";
  * a js file is generated
  */
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+/**
+ * This plugin extracts CSS into separate files. It creates a
+ * CSS file per JS file which contains CSS. It supports
+ * On-Demand-Loading of CSS and SourceMaps.
+ * https://github.com/webpack-contrib/mini-css-extract-plugin
+ */
+const MiniCssExtractPlugin = require("mini-css-extract-plugin"); 
 
 /**
  * Remove files from given directories
  * https://www.npmjs.com/package/remove-files-webpack-plugin
  */
 const RemovePlugin = require("remove-files-webpack-plugin");
+
+
+/**
+ * vue-loader is a loader for webpack that allows you to author Vue
+ * components in a format called Single-File Components (SFCs).
+ * https://vue-loader.vuejs.org/
+ *
+ */
+const { VueLoaderPlugin } = require("vue-loader");
 
 /**
  * Get the PostCss loader plugins
@@ -111,7 +127,8 @@ module.exports = {
 		 * instance and firing the command
 		 */
 		"css/styles.css": [
-			//'./assets/scss/webpack-demo-scss.scss',
+			'./assets/scss/webpack-demo-scss.scss',
+			'./assets/scss/webpack-demo-scss.alt.scss',
 			'./assets/custom-css/webpack-demo-custom-css.css',
 			'./assets/vendor-css/webpack-demo-vendor-css.css'
 		],
@@ -191,133 +208,129 @@ module.exports = {
 		new copyWebpackPlugin([
 			{ from: './assets/images', to: './images' },
 			{ from: './assets/templates/resulting-index-combined-js.html', to: './resulting-index-combined-js.html' }
-		  ]), 
+		]), 
+		new MiniCssExtractPlugin(),
+		
+		new VueLoaderPlugin(),
 	],
 	module: {
 		rules: [
-			{
-				test: /\.s?css$/,
-				use: [
-					{
-					  loader: MiniCssExtractPlugin.loader
-					},
-					'css-loader',
-					// 'postcss-loader',
-					// 'sass-loader',
-				  ],
-			},
 			/**
-			 * Loaders to create and format the
-			 * CSS on build
-			 * NOTE: Build steps for module rules run in reverse!
-			 * I.E. from bottom to top.
-			 */
-			// {
-			// 	test: /\.(sass|scss)$/,
-			// 	use: [
-			// 		{
-			// 			loader: "file-loader",
-			// 			options: {
-			// 				name: "[name].css",
-			// 				context: "./",
-			// 				outputPath: "./css"
-			// 			}
-			// 		},
-			// 		{
-			// 			loader: "extract-loader"
-			// 		},
-			// 		{
-			// 			loader: "css-loader",
-			// 			options: {
-			// 				sourceMap: devMode ? true : false,
-			// 				url: true
-			// 			}
-			// 		},
-			// 		{
-			// 			loader: "postcss-loader",
-			// 			options: {
-			// 				parser: "postcss-scss",
-			// 				ident: "postcss",
-			// 				plugins: () => getPostCssPlugins(),
-			// 				minimize: devMode ? false : true
-			// 			}
-			// 		},
-			// 		{
-			// 			loader: "sass-loader",
-			// 			options: {
-			// 				sourceMap: devMode ? true : false,
-			// 				sassOptions: {
-			// 					outputStyle: devMode ? "expanded" : "compressed"
-			// 				},
-			// 				/**
-			// 				 * Pass in the env var to the sass files,
-			// 				 * defined in this case as $environment.
-			// 				 * As many other vars can be defined and passed
-			// 				 * into the sass in the same way
-			// 				 */
-			// 				prependData: "$MyVar:'" + envVars.MyVar + "';"
-			// 			}
-			// 		}
-			// 	]
-			// },
-
-			/**
-			 * This is for standard CSS files, i.e. not sass/less
-			 * or any other css files that need compiling into CSS
-			 */
-			// {
-			// 	test: /\.css$/,
-			// 	use: [
-			// 		{
-			// 			loader: "file-loader",
-			// 			options: {
-			// 				// name: "[name].css",
-			// 				context: "./",
-			// 				outputPath: "./css"
-			// 			}
-			// 		},
-			// 		{
-			// 			loader: "extract-loader"
-						
-			// 			//loader: MiniCssExtractPlugin.loader,
-			// 		},
-			// 		{
-			// 			loader: "css-loader",
-			// 			options: {
-			// 				sourceMap: devMode ? true : false,
-			// 				url: false
-			// 			}
-			// 		},
-			// 		{
-			// 			loader: "postcss-loader",
-			// 			options: {
-			// 				parser: "postcss-scss",
-			// 				ident: "postcss",
-			// 				plugins: () => getPostCssPlugins(),
-			// 				minimize: devMode ? false : true
-			// 			}
-			// 		}
-			// 	]
-			// },
-
-			/**
-			 * This may be needed to resolve image paths for images refereced in the css, but maybe not
+			 * This may be needed to resolve image paths for images refereced in 
+			 * 	the css, but maybe not
 			 * - leaving in just in case for now
 			 */
 			{
 				test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|png)(\?[a-z0-9=.]+)?$/,
 				use: [
 					{
-						loader: 'file-loader'
+						loader: "url-loader?limit=200000"
 					},
-					// {
-					// 	loader: 'extract-loader'
-					// },
-					// {
-					// 	loader: "url-loader?limit=200000"
-					// },
+				]
+			},
+			{
+				test: /\.(sass|scss|css)$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader
+					},
+					{
+						loader: "css-loader",
+						query: {
+							importLoaders: 1
+						}
+					},
+					{
+						loader: "postcss-loader",
+						options: {
+							ident: "postcss",
+							plugins: loader => [
+								require("postcss-import")(),
+								require("postcss-cssnext")({
+									features: {
+										customProperties: { warnings: false }
+									}
+								}),
+								require("postcss-font-magician")()
+							]
+						}
+					},
+					{
+						loader: "sass-loader",
+						options: {
+							sourceMap: devMode ? true : false,
+							sassOptions: {
+								outputStyle: devMode ? "expanded" : "compressed"
+							},
+							/**
+							 * Pass in the env var to the sass files,
+							 * defined in this case as $environment.
+							 * As many other vars can be defined and passed
+							 * into the sass in the same way
+							 */
+							prependData: (loaderContext) => {
+									// More information about available properties https://webpack.js.org/api/loaders/
+									const { resourcePath, rootContext } = loaderContext;
+									const relativePath = path.relative(rootContext, resourcePath);
+					
+									if (relativePath === 'assets/scss/webpack-demo-scss.alt.scss') {
+									  return "$MyVar:'" + envVars.MyVar + "'; $MyVar2: 'something-for-alt-scss';";
+									}
+					
+									return "$MyVar:'" + envVars.MyVar + "'; $MyVar2: 'something-for-scss';"
+								  },
+						}
+					}
+				  ],
+			},
+
+			/**
+			 * VUE and JS
+			 */
+			{
+				test: /\.js$/,
+				use: [	
+				// {
+				// 	loader: "uglify-loader"
+				// },
+				{
+					loader: "babel-loader",
+					query: {
+						presets: [
+						  require.resolve('babel-preset-env')
+						]
+					  }
+				}
+				],
+				include: [path.resolve(__dirname, "vue.app")],
+				exclude: [ 
+					/node_modules/
+				]
+			},
+			{
+				test: /\.vue$/,
+				loader: "vue-loader",
+				include: [path.resolve(__dirname, "vue.app")],
+				options: {
+					plugins: loader => {
+						new VuetifyLoaderPlugin()
+					}
+				},
+				exclude: [ 
+					/node_modules/
+				]
+			},
+			{
+				test: /\.scss$/,
+				include: [path.resolve(__dirname, "vue.app")],
+				use: [
+				'vue-style-loader',
+				'css-loader',
+				'sass-loader'
 				]
 			}
+
+
 		]
 	}
 };

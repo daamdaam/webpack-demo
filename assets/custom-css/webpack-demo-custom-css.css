@@ -1,3 +1,7 @@
+/**
+	Demo custom CSS file
+**/
+
 body.custom-style-class {
 	background-image: url(/images/Lambanana-Yellow.jpg);
 }

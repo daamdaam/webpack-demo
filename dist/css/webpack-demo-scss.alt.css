@@ -1,0 +1,17 @@
+/**
+	Demo alternate SCSS file
+**/
+html body.sass-style {
+  background-image: url(/images/Lambanana-Yellow.jpg);
+}
+
+body:before {
+  content: some-var-to-be-passed-into-sass-or-js;
+}
+
+body:after {
+  content: "something-for-alt-scss";
+}
+
+/*# sourceURL=webpack-demo-scss.alt.scss */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2stZGVtby1zY3NzLmFsdC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOztFQUVFO0FBQ0Y7RUFDRSxtREFBbUQ7QUFDckQ7O0FBRUE7RUFDRSw4Q0FBOEM7QUFDaEQ7O0FBRUE7RUFDRSxpQ0FBaUM7QUFDbkMiLCJmaWxlIjoid2VicGFjay1kZW1vLXNjc3MuYWx0LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcclxuXHREZW1vIGFsdGVybmF0ZSBTQ1NTIGZpbGVcclxuKiovXG5odG1sIGJvZHkuc2Fzcy1zdHlsZSB7XG4gIGJhY2tncm91bmQtaW1hZ2U6IHVybCgvaW1hZ2VzL0xhbWJhbmFuYS1ZZWxsb3cuanBnKTtcbn1cblxuYm9keTpiZWZvcmUge1xuICBjb250ZW50OiBzb21lLXZhci10by1iZS1wYXNzZWQtaW50by1zYXNzLW9yLWpzO1xufVxuXG5ib2R5OmFmdGVyIHtcbiAgY29udGVudDogXCJzb21ldGhpbmctZm9yLWFsdC1zY3NzXCI7XG59XG4iXX0= */
