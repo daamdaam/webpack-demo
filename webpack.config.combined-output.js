@@ -82,6 +82,18 @@ const RemovePlugin = require("remove-files-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 
 /**
+ * Minimizer, uglifier and the like
+ */
+const TerserPlugin = require("terser-webpack-plugin");
+const JavaScriptObfuscator = require("webpack-obfuscator");
+
+/**
+ * Glob entry, a means to find entry files by a glob pattern
+ * https://www.npmjs.com/package/webpack-glob-entry
+ */
+var globEntry = require('webpack-glob-entry');
+
+/**
  * Get the PostCss loader plugins
  * If in production, minification is carried out
  * as well as removing excess content from css files
@@ -132,11 +144,7 @@ module.exports = {
 			'./assets/custom-css/webpack-demo-custom-css.css',
 			'./assets/vendor-css/webpack-demo-vendor-css.css'
 		],
-		"js/modules.js": [
-			'./assets/js/moduleOne.js',
-			'./assets/js/moduleTwo.js',
-			'./assets/js/moduleThree.js'
-		],
+		"js/modules.js": Object.values(globEntry("./assets/js/**/*.js")),
 		"vueapp/index.js": [
 			"./vue.app/src/main.js"
 		]
@@ -182,6 +190,30 @@ module.exports = {
 		path: path.resolve(__dirname, "dist-combined"),
 		publicPath: "/dist-combined/",
 	},
+	optimization: {
+		minimizer: [
+			new TerserPlugin({
+				/**
+				 * https://github.com/terser/terser#minify-options
+				 */
+				terserOptions: {
+					ecma: null,
+					warnings: false,
+					parse: false,
+					compress: false,
+					mangle: false,
+					module: false,
+					output: null,
+					toplevel: false,
+					nameCache: null,
+					ie8: false,
+					keep_classnames: undefined,
+					keep_fnames: false,
+					safari10: false
+				}
+			})
+		]
+	},
 	plugins: [
 		/**
 		 * Clear out old files when recompiling
@@ -205,6 +237,14 @@ module.exports = {
 						method: filePath => {
 							return new RegExp(/\.css.js$/, "m").test(filePath);
 						}
+					},
+					{
+						folder: "dist-separate",
+						method: filePath => {
+							return new RegExp(/\.LICENSE.txt$/, "m").test(
+								filePath
+							);
+						}
 					}
 				]
 			}
@@ -216,6 +256,10 @@ module.exports = {
 		new MiniCssExtractPlugin(),
 		
 		new VueLoaderPlugin(),
+		new TerserPlugin(),
+		// new JavaScriptObfuscator({
+		// 	identifierNamesGenerator: "mangled"
+		// }),
 	],
 	module: {
 		rules: [

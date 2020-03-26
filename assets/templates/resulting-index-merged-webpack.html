@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>A simple webpack demo</title>
+	<title>A simple merged webpack demo</title>
 	<link rel="shortcut icon" href="http://www.angelsolutions.co.uk/wp-content/themes/angel/favicon.ico?v3">
 	<script type="text/javascript" src="js/moduleOne.js.js"></script>
 	<script type="text/javascript" src="js/moduleTwo.js.js"></script>
@@ -11,12 +12,19 @@
 	<link rel="stylesheet" href="css/webpack-demo-custom-css.css">
 	<link rel="stylesheet" href="css/webpack-demo-scss.css">
 </head>
+
 <body class="custom-style-class sass-style vendor-style-class">
 
-	<h1>A simple webpack demo - JS files are separate files as are the css files (vue aspect is separate) </h1>
-	<p>You can modify the loaders in the webpack.js and see what happens when you build using the commend</p>
-	<ul><li>npm run wpsep</li></ul>
+	<h1>A simple webpack demo - JS files are combined into modules.js (vue aswpect is still separate) <br> css is all
+		combined </h1>
+	<p>You can modify the loaders in the webpack.js and see what happens when you build using the commend. <br>
+		<br>
+		The webpack in this istance is made up from a base configuration and an environment specific configuration.</p>
+	<ul>
+		<li>npm run wpmerged</li>
+	</ul>
 
 	<div id="app"></div>
 </body>
+
 </html>

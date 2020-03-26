@@ -1,3 +1,7 @@
 node_modules
 webpack_compiled_code
 webpack_compiled_code.separate
+
+dist-separate
+dist-merged
+dist-combined

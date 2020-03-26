@@ -44,6 +44,18 @@ const MinifyPlugin = require("babel-minify-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 
 /**
+ * JS Minifier
+ * https://webpack.js.org/plugins/terser-webpack-plugin/
+ */
+const TerserPlugin = require("terser-webpack-plugin");
+
+/**
+ * JS Mangler
+ * https://www.npmjs.com/package/webpack-obfuscator
+ */
+const JavaScriptObfuscator = require("webpack-obfuscator");
+
+/**
  * Get environment variables from the .env file, located in the root
  * Envirment variables can be added to the .env file and passed in
  * to a SASS file (or any other files, js etc) using the appropriate
@@ -59,19 +71,16 @@ const envVars = require("dotenv").config({ path: "./.env" }).parsed;
 const devMode = envVars.NODE_ENV !== "production";
 
 /**
- * Delete extraneous files generated when 
- * working on css/scss files
- * For every entrypoint ref to a file, be it js or other, 
- * a js file is generated
- */
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-/**
  * Remove files from given directories
  * https://www.npmjs.com/package/remove-files-webpack-plugin
  */
 const RemovePlugin = require("remove-files-webpack-plugin");
+
+/**
+ * Glob entry, a means to find entry files by a glob pattern
+ * https://www.npmjs.com/package/webpack-glob-entry
+ */
+var globEntry = require('webpack-glob-entry');
 
 /**
  * Get the PostCss loader plugins
@@ -122,11 +131,7 @@ module.exports = {
 		"js/moduleOne.js": "./assets/js/moduleOne.js",
 		"js/moduleTwo.js": "./assets/js/moduleTwo.js",
 		"js/moduleThree.js": "./assets/js/moduleThree.js",
-		"css/main.css": [
-			"./assets/scss/webpack-demo-scss.scss",
-			
-			'./assets/scss/webpack-demo-scss.alt.scss',
-		],
+		"css/main.css": Object.values(globEntry("./assets/scss/**/*.scss")),
 		"css/vendor.css": [
 			"./assets/vendor-css/webpack-demo-vendor-css.css" 
 		],
@@ -176,6 +181,27 @@ module.exports = {
 		path: path.resolve(__dirname, "dist-separate"),
 		publicPath: "/dist-separate/"
 	},
+	optimization: {
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					ecma: undefined,
+					warnings: false,
+					parse: {},
+					compress: {},
+					mangle: false, // Note `mangle.properties` is `false` by default.
+					module: false,
+					output: null,
+					toplevel: false,
+					nameCache: null,
+					ie8: false,
+					keep_classnames: undefined,
+					keep_fnames: false,
+					safari10: false
+				}
+			})
+		]
+	},
 	plugins: [
 		/**
 		 * Clear out old files when recompiling
@@ -199,6 +225,14 @@ module.exports = {
 						method: filePath => {
 							return new RegExp(/\.css.js$/, "m").test(filePath);
 						}
+					},
+					{
+						folder: "dist-separate",
+						method: filePath => {
+							return new RegExp(/\.LICENSE.txt$/, "m").test(
+								filePath
+							);
+						}
 					}
 				]
 			}
@@ -209,6 +243,10 @@ module.exports = {
 		  ]), 
 		  
 		new VueLoaderPlugin(),
+		new TerserPlugin(),
+		new JavaScriptObfuscator({
+			identifierNamesGenerator: "mangled"
+		}),
 	],
 	module: {
 		rules: [
@@ -271,7 +309,6 @@ module.exports = {
 								const { resourcePath, rootContext } = loaderContext;
 								const relativePath = path.relative(rootContext, resourcePath);
 				
-								console.log('relativePath ', relativePath);
 								if (relativePath === 'assets\\scss\\webpack-demo-scss.alt.scss') {
 								  return "$MyVar:" + envVars.MyVar + "; $MyVar2: 'something-for-alt-scss';";
 								}
@@ -303,8 +340,6 @@ module.exports = {
 					},
 					{
 						loader: "extract-loader"
-						
-						//loader: MiniCssExtractPlugin.loader,
 					},
 					{
 						loader: "css-loader",
