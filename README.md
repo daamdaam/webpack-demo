@@ -30,7 +30,7 @@ The output can be seen on:
 I created a final webpack instance consisting of a generic base webpack, inside of which global configs are defined, such as loaders to use, plugins to use, definitions of devMode etc.   THey are merged via an npm package, 'webpack-merge' (https://www.npmjs.com/package/webpack-merge), and the script can be fired which will start a build.  The output of which is the same as the separate instance.
 
 The output can be seen on:
-#### http://10.0.1.34:10003/resulting-index-merged-webpack-instance.html
+#### http://localhost:10003/resulting-index-merged-webpack-instance.html
 
 ## Each webpack instance
 
