@@ -158,14 +158,30 @@ module.exports = (projectUrlBase) => {
 				after: {
 					test: [
 						{
-							folder: "dist-combined",
+							folder: "dist-merged/js",
 							method: (filePath) => {
-								return [
-									new RegExp(/\.css.js$/, "m").test(filePath),
-									new RegExp(/\.LICENSE.txt$/, "m").test(
-										filePath
-									),
-								];
+								return new RegExp(
+									/\.js.LICENSE.txt$/,
+									"m"
+								).test(filePath);
+							},
+						},
+						{
+							folder: "dist-merged/css",
+							method: (filePath) => {
+								return new RegExp(
+									/\.js.LICENSE.txt$/,
+									"m"
+								).test(filePath);
+							},
+						},
+						{
+							folder: "dist-merged/vueapp",
+							method: (filePath) => {
+								return new RegExp(
+									/\.js.LICENSE.txt$/,
+									"m"
+								).test(filePath);
 							},
 						},
 					],

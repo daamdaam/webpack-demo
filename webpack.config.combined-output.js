@@ -227,20 +227,28 @@ module.exports = {
 			},
 			after: {
 				test: [
-					// {
-					// 	folder: "./dist-combined/css",
-					// 	method: filePath => {
-					// 		return [
-					// 			new RegExp(/\.(css.js|LICENSE.txt)$/, "m").test(filePath),
-					// 		]
-					// 	}
-					// },
 					{
-						folder: "./dist-combined/js",
+						folder: "dist-combined/js",
 						method: (filePath) => {
-							return [
-								new RegExp(/\LICENSE$/, "m").test(filePath),
-							];
+							return new RegExp(/\.js.LICENSE.txt$/, "m").test(
+								filePath
+							);
+						},
+					},
+					{
+						folder: "dist-combined/css",
+						method: (filePath) => {
+							return new RegExp(/\.js.LICENSE.txt$/, "m").test(
+								filePath
+							);
+						},
+					},
+					{
+						folder: "dist-combined/vueapp",
+						method: (filePath) => {
+							return new RegExp(/\.js.LICENSE.txt$/, "m").test(
+								filePath
+							);
 						},
 					},
 				],
