@@ -44,16 +44,16 @@ All imported and required node modules have been described with links to where t
 
 The scripts have been added here:
 
-"wpsep": Fire a build process for the separate file output.
-"wpcom": Fire a build process for the combined file output.
-"wpmerged": Fire the build process using the merged webpack instance.
-"httpserver": Simple local server to make specified folders available on a given port in a browser.
-"srvcom": Serve the combined files output on the specified port.
-"srvsep": Serve the separate files output on the specified port.
-"srvmerged": Serve the merged webpack instance files output on the specified port.
-"sep": Build and then serve the separate files output on the specified port.
-"combined": Build and then serve the combined files output on the specified port.
-"merged": Build and then serve the merged webpack instance files on the specified port."
+* "wpsep": Fire a build process for the separate file output.
+* "wpcom": Fire a build process for the combined file output.
+* "wpmerged": Fire the build process using the merged webpack instance.
+* "httpserver": Simple local server to make specified folders available on a given port in a browser.
+* "srvcom": Serve the combined files output on the specified port.
+* "srvsep": Serve the separate files output on the specified port.
+* "srvmerged": Serve the merged webpack instance files output on the specified port.
+* "sep": Build and then serve the separate files output on the specified port.
+* "combined": Build and then serve the combined files output on the specified port.
+* "merged": Build and then serve the merged webpack instance files on the specified port."
 
 The above commands are executed as 
 
