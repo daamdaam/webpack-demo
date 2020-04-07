@@ -5,3 +5,189 @@
 body.custom-style-class {
 	background-image: url(/images/Lambanana-Yellow.jpg);
 }
+
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+	display: block;
+}
+body {
+	font-family: "Cardo", serif;
+	text-align: center;
+	background: transparent;
+	padding: 10px 40px;
+}
+
+p {
+	text-align: left;
+	margin-bottom: 30px;
+	line-height: 24px;
+}
+/*Heading Style One*/
+
+h1 {
+	position: relative;
+	margin-top: 20px;
+	font-family: "Cardo", serif;
+}
+h1.one {
+	background: -moz-linear-gradient(
+		#ffffff 0%,
+		#ffffff 49%,
+		#000000 50%,
+		#000000 51%,
+		#ffffff 52%,
+		#ffffff 100%
+	);
+	background: -ms-linear-gradient(
+		#ffffff 0%,
+		#ffffff 49%,
+		#000000 50%,
+		#000000 51%,
+		#ffffff 52%,
+		#ffffff 100%
+	);
+	background: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0%, #ffffff),
+		color-stop(49%, #ffffff),
+		color-stop(50%, #000000),
+		color-stop(51%, #000000),
+		color-stop(52%, #ffffff),
+		color-stop(100%, #ffffff)
+	);
+	background: -webkit-linear-gradient(
+		#ffffff 0%,
+		#ffffff 49%,
+		#000000 50%,
+		#000000 51%,
+		#ffffff 52%,
+		#ffffff 100%
+	);
+	background: -o-linear-gradient(
+		#ffffff 0%,
+		#ffffff 49%,
+		#000000 50%,
+		#000000 51%,
+		#ffffff 52%,
+		#ffffff 100%
+	);
+	background: linear-gradient(
+		#ffffff 0%,
+		#ffffff 49%,
+		#000000 50%,
+		#000000 51%,
+		#ffffff 52%,
+		#ffffff 100%
+	);
+}
+h1.one span {
+	background: #fff;
+	padding: 0 20px;
+	position: relative;
+	z-index: 5;
+}
+/*Heading Style Two*/
+
+h1.two {
+}
+h1.two span {
+	background: #fff;
+	padding: 0 20px;
+	position: relative;
+	border-left: 2px solid #666;
+	border-right: 2px solid #666;
+	z-index: 5;
+}
+
+/*Heading Style Three*/
+
+h3 {
+	position: relative;
+	font-family: Lato;
+	font-weight: 300;
+	display: inline-block;
+	color: #222;
+	font-size: 40px;
+	margin: 30px;
+	border-left: solid 1px #e65941;
+	border-right: solid 1px #e65941;
+	padding: 0 10px;
+}
+h3:before,
+h3:after {
+	position: absolute;
+	content: "";
+	border-bottom: 1px solid #e65941;
+	width: 30px;
+	bottom: 23px;
+}
+h3:before {
+	left: -30px;
+}
+h3:after {
+	right: -30px;
+}
+
+/*Heading Style Four*/
+
+.sandbox-correct-pronounciation {
+	padding: 1em 0 1em 0;
+	background-color: #5774b8;
+}
+
+.heading-correct-pronounciation {
+	margin: auto;
+	text-align: center;
+	position: relative;
+}
+
+h5 {
+	font-family: "Cardo", serif;
+	font-size: 1.5em;
+	font-weight: normal;
+	font-style: italic;
+	letter-spacing: 0.1em;
+	line-height: 2.2em;
+	color: #fff;
+}
+
+em {
+	font-family: "EB Garamond", serif;
+	font-size: 3.5em;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	display: block;
+	font-style: normal;
+	padding-top: 0.1em;
+	text-shadow: 0.07em 0.07em 0 rgba(0, 0, 0, 0.1);
+
+	&::before,
+	&::after {
+		content: "§";
+		display: inline-block;
+		-webkit-transform: rotate(90deg);
+		-moz-transform: rotate(90deg);
+		-o-transform: rotate(90deg);
+		-ms-transform: rotate(90deg);
+		transform: rotate(90deg);
+		opacity: 0.2;
+		margin: 0 0.6em;
+		font-size: 0.5em;
+	}
+}
+
+.bottom {
+	font-size: 1.5em;
+	letter-spacing: 0.07em;
+	font-size: 1em;
+	display: block;
+}

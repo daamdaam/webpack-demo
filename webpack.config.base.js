@@ -98,13 +98,13 @@ const getPostCssPlugins = () => {
 						svgo: {
 							plugins: [
 								{
-									removeDoctype: devMode ? false : true
-								}
-							]
-						}
-					}
-				]
-			})
+									removeDoctype: devMode ? false : true,
+								},
+							],
+						},
+					},
+				],
+			}),
 		];
 	} else {
 		return [require("autoprefixer")()];
@@ -136,10 +136,10 @@ module.exports = (projectUrlBase) => {
 						ie8: false,
 						keep_classnames: undefined,
 						keep_fnames: false,
-						safari10: false
-					}
-				})
-			]
+						safari10: false,
+					},
+				}),
+			],
 		},
 		plugins: [
 			/**
@@ -153,52 +153,48 @@ module.exports = (projectUrlBase) => {
 			 */
 			new RemovePlugin({
 				before: {
-					include: [path.resolve(__dirname, "dist-merged")]
+					include: [path.resolve(__dirname, "dist-merged")],
 				},
 				after: {
 					test: [
 						{
-							folder: "dist-merged/css",
-							method: filePath => {
-								return new RegExp(/\.css.js$/, "m").test(
-									filePath
-								);
-							}
+							folder: "dist-combined",
+							method: (filePath) => {
+								return [
+									new RegExp(/\.css.js$/, "m").test(filePath),
+									new RegExp(/\.LICENSE.txt$/, "m").test(
+										filePath
+									),
+								];
+							},
 						},
-						{
-							folder: "dist-merged",
-							method: filePath => {
-								return new RegExp(/\.LICENSE.txt$/, "m").test(
-									filePath
-								);
-							}
-						}
-					]
-				}
+					],
+				},
 			}),
 
 			/**
 			 * Copy files and assets on build
-			 * I didnt do anything fancy with the html 
-			 * templates, other than referencing the outputted 
+			 * I didnt do anything fancy with the html
+			 * templates, other than referencing the outputted
 			 * js and css files.
 			 */
 			new copyWebpackPlugin([
 				{ from: "./assets/images", to: "./images" },
 				{
-					from: "./assets/templates/resulting-index-merged-webpack.html",
-					to: "./resulting-index-merged-webpack.html"
-				}
+					from:
+						"./assets/templates/resulting-index-merged-webpack-instance.html",
+					to: "./resulting-index-merged-webpack-instance.html",
+				},
 			]),
 
 			/**
-			 * Vue Loader 
+			 * Vue Loader
 			 */
 			new VueLoaderPlugin(),
 			new TerserPlugin(),
 			new JavaScriptObfuscator({
-				identifierNamesGenerator: "mangled"
-			})
+				identifierNamesGenerator: "mangled",
+			}),
 		],
 		module: {
 			rules: [
@@ -217,19 +213,19 @@ module.exports = (projectUrlBase) => {
 							options: {
 								name: "[name].css",
 								context: "./",
-								outputPath: "./css/"
-							}
+								outputPath: "./css/",
+							},
 						},
 						{
-							loader: "extract-loader"
+							loader: "extract-loader",
 						},
 						{
 							loader: "css-loader",
 							options: {
 								sourceMap: devMode ? true : false,
 								importLoaders: 1,
-								url: true
-							}
+								url: true,
+							},
 						},
 						{
 							loader: "postcss-loader",
@@ -237,8 +233,8 @@ module.exports = (projectUrlBase) => {
 								parser: "postcss-scss",
 								ident: "postcss",
 								plugins: () => getPostCssPlugins(),
-								minimize: devMode ? false : true
-							}
+								minimize: devMode ? false : true,
+							},
 						},
 						{
 							loader: "sass-loader",
@@ -247,7 +243,7 @@ module.exports = (projectUrlBase) => {
 								sassOptions: {
 									outputStyle: devMode
 										? "expanded"
-										: "compressed"
+										: "compressed",
 								},
 								/**
 								 * Pass in the env var to the sass files,
@@ -256,11 +252,11 @@ module.exports = (projectUrlBase) => {
 								 * into the sass in the same way
 								 */
 
-								prependData: loaderContext => {
+								prependData: (loaderContext) => {
 									// More information about available properties https://webpack.js.org/api/loaders/
 									const {
 										resourcePath,
-										rootContext
+										rootContext,
 									} = loaderContext;
 									const relativePath = path.relative(
 										rootContext,
@@ -281,12 +277,14 @@ module.exports = (projectUrlBase) => {
 									return (
 										"$MyVar:'" +
 										envVars.MyVar +
-										"'; $MyVar2: '" + projectUrlBase + "';"
+										"'; $MyVar2: '" +
+										projectUrlBase +
+										"';"
 									);
-								}
-							}
-						}
-					]
+								},
+							},
+						},
+					],
 				},
 
 				/**
@@ -302,18 +300,18 @@ module.exports = (projectUrlBase) => {
 							options: {
 								name: "[name].css",
 								context: "./",
-								outputPath: "./css/"
-							}
+								outputPath: "./css/",
+							},
 						},
 						{
-							loader: "extract-loader"
+							loader: "extract-loader",
 						},
 						{
 							loader: "css-loader",
 							options: {
 								sourceMap: devMode ? true : false,
-								url: false
-							}
+								url: false,
+							},
 						},
 						{
 							loader: "postcss-loader",
@@ -321,10 +319,10 @@ module.exports = (projectUrlBase) => {
 								parser: "postcss-scss",
 								ident: "postcss",
 								plugins: () => getPostCssPlugins(),
-								minimize: devMode ? false : true
-							}
-						}
-					]
+								minimize: devMode ? false : true,
+							},
+						},
+					],
 				},
 
 				/**
@@ -335,9 +333,9 @@ module.exports = (projectUrlBase) => {
 					test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|png)(\?[a-z0-9=.]+)?$/,
 					use: [
 						{
-							loader: "file-loader"
-						}
-					]
+							loader: "file-loader",
+						},
+					],
 				},
 
 				{
@@ -346,30 +344,30 @@ module.exports = (projectUrlBase) => {
 						{
 							loader: "babel-loader",
 							query: {
-								presets: [require.resolve("babel-preset-env")]
-							}
-						}
+								presets: [require.resolve("babel-preset-env")],
+							},
+						},
 					],
 					include: [path.resolve(__dirname, "vue.app")],
-					exclude: [path.resolve(__dirname, "node_modules")]
+					exclude: [path.resolve(__dirname, "node_modules")],
 				},
 				{
 					test: /\.vue$/,
 					loader: "vue-loader",
 					include: [path.resolve(__dirname, "vue.app")],
 					options: {
-						plugins: loader => {
+						plugins: (loader) => {
 							new VuetifyLoaderPlugin();
-						}
+						},
 					},
-					exclude: [path.resolve(__dirname, "node_modules")]
+					exclude: [path.resolve(__dirname, "node_modules")],
 				},
 				{
 					test: /\.s?css$/,
 					include: [path.resolve(__dirname, "vue.app")],
-					use: ["vue-style-loader", "css-loader", "sass-loader"]
-				}
-			]
-		}
+					use: ["vue-style-loader", "css-loader", "sass-loader"],
+				},
+			],
+		},
 	};
 };

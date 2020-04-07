@@ -11,7 +11,7 @@
 		"srvsep": "node ./node_modules/http-server/bin/http-server ./dist-separate --port 10002",
 		"srvmerged": "node ./node_modules/http-server/bin/http-server ./dist-merged --port 10003",
 		"sep": "npm run wpsep && npm run srvsep",
-		"com": "npm run wpcom && npm run srvcom",
+		"combined": "npm run wpcom && npm run srvcom",
 		"merged": "npm run wpmerged && npm run srvmerged"
 	},
 	"keywords": [
