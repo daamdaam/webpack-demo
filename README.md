@@ -4,7 +4,7 @@ This repo will demonstrate some webpack setups that can be used in your projects
 
 ## Webpack to build combined assets
 
-Below each package.json script is explained.
+Below each webpack cli command is explained.
 
 #### $ npm run webpackCombined
 
